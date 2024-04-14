@@ -1,27 +1,36 @@
-import { Ball } from "./ball.js";
-import { getElementByRef } from "../utils/index.js";
-
-function createBall () {
-    const ball = new Ball();
-
-    const div =  document.createElement('div');
-
-    div.textContent = ball.ref;
-    div.setAttribute('ref', ball.ref);
-    div.setAttribute('class', 'ball');
-
-    div.style.bottom = `${ball.posY}px`;
-    div.style.left = `${ball.posX}px`;
-
-
-    const boundingBox = document.getElementById("bounding-box");
-    boundingBox.appendChild( div );
-
-    ball.updatePosition();
-}
+import { PhysicsObject } from "./physicsObject.js";
 
 function init() {
-    createBall();
+    let time = new Date().getSeconds();
+
+    const object = new PhysicsObject;
+
+    const objectDiv = document.createElement('div');
+
+    objectDiv.setAttribute('ref', 'object');
+    objectDiv.setAttribute('class', 'ball');
+
+    objectDiv.style.bottom = "600px";
+    objectDiv.style.left = "750px";
+
+    document.getElementById('bounding-box').appendChild(objectDiv);
+
+    requestAnimationFrame( () => {
+        time = animate(objectDiv, object, time);
+    });
 }
 
-document.addEventListener("DOMContentLoaded", init);
+function animate(div, object, time) {
+    const timeElapsed = new Date().getSeconds() - time;
+    if (div.style.bottom >= "0px") {
+        div.style.bottom = object.updateVertical(div.style.bottom.substring(0, div.style.bottom.length-2), timeElapsed) + "px";
+
+        requestAnimationFrame(() => animate(div, object, time));
+        return time;
+    } else {
+        time = new Date().getSeconds();
+        return time;
+    }
+}
+
+addEventListener('DOMContentLoaded', init);

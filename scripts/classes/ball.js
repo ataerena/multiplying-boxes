@@ -8,7 +8,6 @@ class Ball {
 
     posX = Math.random() * 1000;
     posY = Math.random() * 1000;
-    moving = true;
 
     ref = `ball${refCount}`;
 
@@ -17,16 +16,10 @@ class Ball {
         this.updateXAxis();
     }
 
-    updateHeight() {
-        this.moving = !(this.posY === 0);
-        if ( this.moving === true ) {
-            const ball = getElementByRef(this.ref);
-            this.posY = this.posY - gravity*5 + "px";
-            ball.style.bottom = this.posY;
-
-            console.log("Moving!");
-            
-            this.updateHeight();
+    updateHeight(timeElapsed) {
+        if ( this.posY !== 0 ) {
+            const newHeight = -gravity * (5 ** timeElapsed);
+            return newHeight;
         } else {
             this.endMovement();
         }
@@ -37,10 +30,7 @@ class Ball {
     }
 
     endMovement() {
-        if (this.posY = 0) {
-            this.moving = false;
-            refCount += 1;
-        }
+        refCount += 1;
     }
 
 }
